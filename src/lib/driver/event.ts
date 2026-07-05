@@ -11,6 +11,7 @@ export enum DriverEvent {
   disconnected = "disconnected",
   pushConnected = "push connected",
   pushDisconnected = "push disconnected",
+  pushMessage = "push message",
   mqttConnected = "mqtt connected",
   mqttDisconnected = "mqtt disconnected",
   logLevelChanged = "log level changed",
@@ -47,8 +48,15 @@ export interface OutgoingEventDriverConnectionError extends OutgoingEventDriverB
   error: Error;
 }
 
+export interface OutgoingEventDriverPushMessage extends OutgoingEventDriverBase {
+  source: "driver";
+  event: DriverEvent.pushMessage;
+  message: unknown;
+}
+
 export type OutgoingEventDriver =
   | OutgoingEventDriverCaptchaRequest
   | OutgoingEventDriverLogLevelChanged
   | OutgoingEventDriverLogging
-  | OutgoingEventDriverConnectionError;
+  | OutgoingEventDriverConnectionError
+  | OutgoingEventDriverPushMessage;

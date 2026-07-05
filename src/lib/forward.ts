@@ -20,6 +20,7 @@ import {
   DatabaseQueryLocal,
   DatabaseQueryByDate,
   DatabaseCountByDate,
+  PushMessage,
 } from "eufy-security-client";
 import { Readable } from "stream";
 import { ILogObj, Logger } from "tslog";
@@ -102,6 +103,16 @@ export class EventForwarder {
         this.sendEvent(client, {
           source: "driver",
           event: DriverEvent.pushDisconnected,
+        }),
+      );
+    });
+
+    this.clients.driver.on("push message", (message: PushMessage) => {
+      this.clients.clients.forEach((client) =>
+        this.sendEvent(client, {
+          source: "driver",
+          event: DriverEvent.pushMessage,
+          message: message as unknown,
         }),
       );
     });
